@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <!--<feature url="URL" id="org.csstudio.dmtest" version="X.Y.Z.qualifier">
+      <category name="CATEGORY"/>
+   </feature>-->
+
+   <feature id="org.diirt.feature">
+      <category name="tychotest"/>
+   </feature>
+
+   <category-def name="tychotest" label="tycho test"/>
+
+</site>
