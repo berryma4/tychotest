@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>tychotest</groupId>
+	<artifactId>testing</artifactId>
+	<version>BUILD-VERSION</version>
+	<packaging>pom</packaging>
+
+	<!-- USE MAVEN 3.0 -->
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<!-- PROPERTIES -->
+	<properties>
+		<!-- VERSIONS -->
+                <eclipse-site>http://download.eclipse.org/releases/luna</eclipse-site>
+		<eclipse-update-site>http://download.eclipse.org/eclipse/updates/4.4</eclipse-update-site>
+		<tycho.version>0.20.0</tycho.version>
+		<tycho-extras.version>0.20.0</tycho-extras.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
+		<baselineMode>fail</baselineMode>
+		<skipTests>false</skipTests>
+	</properties>
+
+	<!-- PLUGIN REPOSITORIES -->
+	<pluginRepositories>
+		<pluginRepository>
+			<id>tycho</id>
+			<url>https://oss.sonatype.org/content/groups/public</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<!-- Profiles -->
+	<profiles>
+		<profile>
+			<id>local-dev</id>
+			<properties>
+				<jgit.dirtyWorkingTree>warning</jgit.dirtyWorkingTree>
+				<baselineMode>warn</baselineMode>
+			</properties>
+			<repositories>
+			</repositories>
+			<pluginRepositories>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+	<repositories>
+		<repository>
+			<id>diirt-snapshot</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+		<!-- diirt things are in epics too -->
+		<repository>
+			<id>epics</id>
+			<name>EPICS Repository</name>
+			<url>http://epics.sourceforge.net/maven2/</url>
+		</repository>
+		<repository>
+			<id>eclipse</id>
+			<url>${eclipse-site}</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>eclipse-updates</id>
+			<url>${eclipse-update-site}</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>orbit</id>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20140114142710/repository</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+	<!-- CHILD MODULES -->
+	<modules>
+		<module>core</module>
+		<module>basicapp</module>
+		<module>diirt</module>
+	</modules>
+
+
+	<build>
+		<!-- PLUGIN MANAGEMENT -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-packaging-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.eclipse.tycho.extras</groupId>
+							<artifactId>tycho-buildtimestamp-jgit</artifactId>
+							<version>${tycho-extras.version}</version>
+						</dependency>
+					</dependencies>
+					<configuration>
+						<timestampProvider>jgit</timestampProvider>
+						<!-- jgit.dirtyWorkingTree options: ignore, warning, error -->
+						<jgit.dirtyWorkingTree>${jgit.dirtyWorkingTree}</jgit.dirtyWorkingTree>
+						<jgit.ignore>
+							pom.xml
+						</jgit.ignore>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<!-- PLUGIN CONFIGURATION -->
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<!-- This is to avoid errors when using restricted API from org.ecpics.vtype, and sun.* -->
+					<compilerArgument>-err:-forbidden</compilerArgument>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<pomDependencies>consider</pomDependencies>
+				</configuration>
+			</plugin>	
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<configuration>
+					<!--Some project include things that no longer exists. This should be 
+						fixed, but for now this parameter lets the build continue. -->
+					<strictBinIncludes>false</strictBinIncludes>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+						<configuration>
+							<!--Some project include things that no longer exists. This should 
+								be fixed, but for now this parameter lets the build continue. -->
+							<strictSrcIncludes>false</strictSrcIncludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
