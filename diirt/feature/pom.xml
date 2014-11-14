@@ -11,4 +11,16 @@
   <artifactId>org.diirt.feature</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>eclipse-feature</packaging>
+  	<dependencies>
+		<dependency>
+			<groupId>org.diirt</groupId>
+			<artifactId>pvmanager</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.diirt</groupId>
+			<artifactId>datasource-file</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+  	</dependencies>
 </project>

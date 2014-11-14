@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>tychotest</groupId>
 	<artifactId>testing</artifactId>
-	<version>BUILD-VERSION</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<!-- USE MAVEN 3.0 -->
@@ -21,32 +21,17 @@
 		<tycho.version>0.20.0</tycho.version>
 		<tycho-extras.version>0.20.0</tycho-extras.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
-		<baselineMode>fail</baselineMode>
-		<skipTests>false</skipTests>
+		<jgit.dirtyWorkingTree>warning</jgit.dirtyWorkingTree>
+		<baselineMode>warn</baselineMode>
 	</properties>
-
-	<!-- PLUGIN REPOSITORIES -->
-	<pluginRepositories>
-		<pluginRepository>
-			<id>tycho</id>
-			<url>https://oss.sonatype.org/content/groups/public</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<!-- Profiles -->
 	<profiles>
 		<profile>
-			<id>local-dev</id>
+			<id>build-server</id>
 			<properties>
-				<jgit.dirtyWorkingTree>warning</jgit.dirtyWorkingTree>
-				<baselineMode>warn</baselineMode>
+				<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
+				<baselineMode>fail</baselineMode>
 			</properties>
 			<repositories>
 			</repositories>
@@ -56,10 +41,10 @@
 	</profiles>
 	<repositories>
 		<repository>
-			<id>diirt-snapshot</id>
+			<id>maven-central-snapshot</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
-		<!-- diirt things are in epics too -->
+		<!-- v4 things are in epics -->
 		<repository>
 			<id>epics</id>
 			<name>EPICS Repository</name>
@@ -86,18 +71,6 @@
 		<module>diirt</module>
 		<module>repository</module>
 	</modules>
-  	<dependencies>
-		<dependency>
-			<groupId>org.diirt</groupId>
-			<artifactId>pvmanager</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.diirt</groupId>
-			<artifactId>datasource-file</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
-		</dependency>
-  	</dependencies>
 	<build>
 		<!-- PLUGIN MANAGEMENT -->
 		<pluginManagement>
